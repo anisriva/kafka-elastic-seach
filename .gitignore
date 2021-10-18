@@ -1,6 +1,9 @@
 # Intellij
 .idea/
 
+# docker mounts
+docker-setup/mnt/
+
 # Compiled class file
 *.class
 

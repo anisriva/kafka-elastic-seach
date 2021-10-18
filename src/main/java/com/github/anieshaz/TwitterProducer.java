@@ -39,7 +39,7 @@ public class TwitterProducer extends ReadPropertyFile{
         String twitterClientName = "twitter-client-"+tag;
 
         // topic name
-        String topic = "twitter.tagsearch."+tag;
+        String topic = "twitter.key."+tag;
 
         new TwitterProducer().run(terms, twitterClientName, topic);
 
