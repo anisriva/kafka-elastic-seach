@@ -18,11 +18,12 @@ public class ReadPropertyFile {
     // Broker vars
     public String TOPIC;
     public String BOOTSTRAP_SERVER;
-    public String COMPRESSION_TYPE;
-    public int BATCH_SIZE;
-    public int LINGER_MS;
+    public String PRODUCER_COMPRESSION_TYPE;
+    public int PRODUCER_BATCH_SIZE;
+    public int PRODUCER_LINGER_MS;
     public int CONSUMER_POLL_TIMEOUT_MS;
-    public boolean COMMIT_ASYNC;
+    public int CONSUMER_MAX_POLL_RECORDS;
+    public boolean CONSUMER_COMMIT_ASYNC;
 
     // twitter vars
     public int QUEUE_CAPACITY;
@@ -66,11 +67,12 @@ public class ReadPropertyFile {
 
         // kafka vars
         BOOTSTRAP_SERVER = properties.getProperty("bootstrap.server");
-        COMPRESSION_TYPE = properties.getProperty("msg.compression.type");
-        BATCH_SIZE = Integer.parseInt(properties.getProperty("batch.size.kb"));
-        LINGER_MS = Integer.parseInt(properties.getProperty("linger.ms"));
+        PRODUCER_COMPRESSION_TYPE = properties.getProperty("producer.msg.compression.type");
+        PRODUCER_BATCH_SIZE = Integer.parseInt(properties.getProperty("producer.batch.size.kb"));
+        PRODUCER_LINGER_MS = Integer.parseInt(properties.getProperty("producer.linger.ms"));
         CONSUMER_POLL_TIMEOUT_MS = Integer.parseInt(properties.getProperty("consumer.poll.timeout.ms"));
-        COMMIT_ASYNC = Boolean.parseBoolean(properties.getProperty("consumer.commit.async"));
+        CONSUMER_MAX_POLL_RECORDS = Integer.parseInt(properties.getProperty("consumer.max.poll.records"));
+        CONSUMER_COMMIT_ASYNC = Boolean.parseBoolean(properties.getProperty("consumer.commit.async"));
 
         // es vars
         ES_HOSTNAME = properties.getProperty("es.hostname");

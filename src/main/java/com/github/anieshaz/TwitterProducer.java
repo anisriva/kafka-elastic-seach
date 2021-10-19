@@ -41,30 +41,30 @@ public class TwitterProducer extends ReadPropertyFile{
         producerConfig.setProperty(ProducerConfig.RETRIES_CONFIG, Integer.toString(Integer.MAX_VALUE));
 
         // config for compression to minimize latency and improve throughput
-        producerConfig.setProperty(ProducerConfig.COMPRESSION_TYPE_CONFIG, COMPRESSION_TYPE);
-        producerConfig.setProperty(ProducerConfig.LINGER_MS_CONFIG, Integer.toString(LINGER_MS));
-        producerConfig.setProperty(ProducerConfig.BATCH_SIZE_CONFIG, Integer.toString(BATCH_SIZE*1024)); // 32 KB batch size
+        producerConfig.setProperty(ProducerConfig.COMPRESSION_TYPE_CONFIG, PRODUCER_COMPRESSION_TYPE);
+        producerConfig.setProperty(ProducerConfig.LINGER_MS_CONFIG, Integer.toString(PRODUCER_LINGER_MS));
+        producerConfig.setProperty(ProducerConfig.BATCH_SIZE_CONFIG, Integer.toString(PRODUCER_BATCH_SIZE *1024)); // 32 KB batch size
 
-        printProperties(producerConfig);
+//        printProperties(producerConfig);
         // create and return producer
         return new KafkaProducer<>(producerConfig);
     }
-    public static void printProperties(Properties prop)
-    {
-        for (Object key: prop.keySet()) {
-            System.out.println(key + ": " + prop.getProperty(key.toString()));
-        }
-    }
+//    public static void printProperties(Properties prop)
+//    {
+//        for (Object key: prop.keySet()) {
+//            System.out.println(key + ": " + prop.getProperty(key.toString()));
+//        }
+//    }
 
     public Client createTwitterClient(
             BlockingQueue<String> msgQueue,
-            List<String> terms,
+            List<String> keyTag,
             String twitterClientName) {
-
+        logger.info("Creating Twitter client for search term : "+keyTag);
         Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 
-        hosebirdEndpoint.trackTerms(terms);
+        hosebirdEndpoint.trackTerms(keyTag);
 
         // These secrets should be read from a config file
         Authentication hosebirdAuth = new OAuth1(CONSUMER_API_KEY, CONSUMER_API_SECRET, APP_TOKEN, APP_SECRET);
@@ -86,7 +86,7 @@ public class TwitterProducer extends ReadPropertyFile{
         System.out.println("Enter the search keyword : ");
         KEY_TAG = getInput.nextLine();
 
-        List<String> terms = Lists.newArrayList(KEY_TAG);
+        List<String> keyTag = Lists.newArrayList(KEY_TAG);
 
         // twitter client name
         String twitterClientName = ES_INDEX+"-client-"+KEY_TAG;
@@ -96,7 +96,8 @@ public class TwitterProducer extends ReadPropertyFile{
 
         // twitter client
         BlockingQueue<String> msgQueue = new LinkedBlockingQueue<>(QUEUE_CAPACITY);
-        Client client = createTwitterClient(msgQueue, terms, twitterClientName);
+
+        Client client = createTwitterClient(msgQueue, keyTag, twitterClientName);
         client.connect();
 
         // kafka producer

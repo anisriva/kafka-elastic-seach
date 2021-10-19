@@ -39,6 +39,10 @@ public class ElasticConsumer extends TwitterProducer {
         // group properties
         consumerProperties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         consumerProperties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "grp_"+TOPIC.replace(".","_"));
+
+        // advanced settings
+        consumerProperties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, Integer.toString(CONSUMER_MAX_POLL_RECORDS));
+
         // auto-commit
         consumerProperties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
 
@@ -64,20 +68,21 @@ public class ElasticConsumer extends TwitterProducer {
 
     public void run(){
         // tag
-        String tag = String.format("%s_%s",ES_INDEX,KEY_TAG);
+        String es_index = String.format("%s_%s",ES_INDEX,KEY_TAG);
 
-        // create elastic client
-        logger.info("Creating ES client with tag "+ tag);
-        RestHighLevelClient client = createElasticClient();
-        IndexRequest indexRequest = new IndexRequest(tag);
-
-        // fetch data
+        // fetch topic
         if (TOPIC == null){
             logger.warn("TOPIC not found");
             System.out.println("Provide the name of the topic to be consumed");
             Scanner sc = new Scanner(System.in);
             TOPIC = sc.nextLine();
+            es_index = TOPIC.replace(".","_");
         }
+
+        // create elastic client
+        logger.info("Creating ES client with index "+ es_index);
+        RestHighLevelClient client = createElasticClient();
+        IndexRequest indexRequest = new IndexRequest(es_index);
 
         // create consumer
         logger.info("Creating consumer");
@@ -141,8 +146,8 @@ public class ElasticConsumer extends TwitterProducer {
                 }else{
                     logger.info(String.format("Message pushed in ES with id : [%s] committing the offset in the broker with consumer.commit.async set as [%b]",
                             responseId,
-                            COMMIT_ASYNC));
-                    if (COMMIT_ASYNC) {
+                            CONSUMER_COMMIT_ASYNC));
+                    if (CONSUMER_COMMIT_ASYNC) {
                         consumer.commitAsync();
                     } else consumer.commitSync();
                 }

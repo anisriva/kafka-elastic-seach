@@ -11,7 +11,6 @@ services:
   kafka:
     container_name: kafka
     image: debezium/kafka
-#    image: confluentinc/cp-kafka
     ports:
       - "29092:29092"
     links:
