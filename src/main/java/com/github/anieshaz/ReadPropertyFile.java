@@ -17,7 +17,7 @@ public class ReadPropertyFile {
 
     // Broker vars
     public String TOPIC;
-    public String BOOTSTRAP_SERVER;
+    public String KAFKA_BOOTSTRAP_SERVER;
     public String PRODUCER_COMPRESSION_TYPE;
     public int PRODUCER_BATCH_SIZE;
     public int PRODUCER_LINGER_MS;
@@ -26,12 +26,12 @@ public class ReadPropertyFile {
     public boolean CONSUMER_COMMIT_ASYNC;
 
     // twitter vars
-    public int QUEUE_CAPACITY;
-    public int POLL_SECONDS;
-    public String CONSUMER_API_KEY;
-    public String CONSUMER_API_SECRET;
-    public String APP_TOKEN;
-    public String APP_SECRET;
+    public int TWITTER_QUEUE_CAPACITY;
+    public int TWITTER_POLL_SECONDS;
+    public String TWITTER_CONSUMER_API_KEY;
+    public String TWITTER_CONSUMER_API_SECRET;
+    public String TWITTER_APP_TOKEN;
+    public String TWITTER_APP_SECRET;
 
     // ES vars
     public String ES_HOSTNAME;
@@ -58,15 +58,15 @@ public class ReadPropertyFile {
         APP_ALWAYS_ON = Boolean.parseBoolean(properties.getProperty("app.always.on"));
 
         // twitter vars
-        QUEUE_CAPACITY = Integer.parseInt(properties.getProperty("queue.capacity"));
-        POLL_SECONDS = Integer.parseInt(properties.getProperty("poll.timeout.seconds"));
-        CONSUMER_API_KEY = properties.getProperty("consumer.api.key");
-        CONSUMER_API_SECRET = properties.getProperty("consumer.api.secret");
-        APP_TOKEN = properties.getProperty("twitter.app.token");
-        APP_SECRET = properties.getProperty("twitter.app.secret");
+        TWITTER_QUEUE_CAPACITY = Integer.parseInt(properties.getProperty("twitter.queue.capacity"));
+        TWITTER_POLL_SECONDS = Integer.parseInt(properties.getProperty("twitter.poll.timeout.seconds"));
+        TWITTER_CONSUMER_API_KEY = properties.getProperty("twitter.consumer.api.key");
+        TWITTER_CONSUMER_API_SECRET = properties.getProperty("twitter.consumer.api.secret");
+        TWITTER_APP_TOKEN = properties.getProperty("twitter.app.token");
+        TWITTER_APP_SECRET = properties.getProperty("twitter.app.secret");
 
         // kafka vars
-        BOOTSTRAP_SERVER = properties.getProperty("bootstrap.server");
+        KAFKA_BOOTSTRAP_SERVER = properties.getProperty("kafka.bootstrap.server");
         PRODUCER_COMPRESSION_TYPE = properties.getProperty("producer.msg.compression.type");
         PRODUCER_BATCH_SIZE = Integer.parseInt(properties.getProperty("producer.batch.size.kb"));
         PRODUCER_LINGER_MS = Integer.parseInt(properties.getProperty("producer.linger.ms"));

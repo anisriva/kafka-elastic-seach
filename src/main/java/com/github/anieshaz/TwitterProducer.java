@@ -67,7 +67,7 @@ public class TwitterProducer extends ReadPropertyFile{
         hosebirdEndpoint.trackTerms(keyTag);
 
         // These secrets should be read from a config file
-        Authentication hosebirdAuth = new OAuth1(CONSUMER_API_KEY, CONSUMER_API_SECRET, APP_TOKEN, APP_SECRET);
+        Authentication hosebirdAuth = new OAuth1(TWITTER_CONSUMER_API_KEY, TWITTER_CONSUMER_API_SECRET, TWITTER_APP_TOKEN, TWITTER_APP_SECRET);
 
         ClientBuilder builder = new ClientBuilder()
                 .name(twitterClientName)
@@ -95,13 +95,13 @@ public class TwitterProducer extends ReadPropertyFile{
         TOPIC = ES_INDEX+"."+KEY_TAG;
 
         // twitter client
-        BlockingQueue<String> msgQueue = new LinkedBlockingQueue<>(QUEUE_CAPACITY);
+        BlockingQueue<String> msgQueue = new LinkedBlockingQueue<>(TWITTER_QUEUE_CAPACITY);
 
         Client client = createTwitterClient(msgQueue, keyTag, twitterClientName);
         client.connect();
 
         // kafka producer
-        KafkaProducer<String, String> producer = createKafkaProducer(BOOTSTRAP_SERVER);
+        KafkaProducer<String, String> producer = createKafkaProducer(KAFKA_BOOTSTRAP_SERVER);
 
         // create a shutdown hook
         Runtime.getRuntime().addShutdownHook( new Thread(() ->{
@@ -115,7 +115,7 @@ public class TwitterProducer extends ReadPropertyFile{
         while (!client.isDone()) {
             String msg = null;
             try {
-                msg = msgQueue.poll(QUEUE_CAPACITY, TimeUnit.SECONDS);
+                msg = msgQueue.poll(TWITTER_QUEUE_CAPACITY, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 logger.warn("Caught [ InterruptedException ] terminating execution ... ");
                 client.stop();
