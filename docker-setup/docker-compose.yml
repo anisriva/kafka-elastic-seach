@@ -48,7 +48,7 @@ services:
       - node.name=elastic-search
       - cluster.name=cluster
       - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
     ulimits:
       memlock:
         soft: -1

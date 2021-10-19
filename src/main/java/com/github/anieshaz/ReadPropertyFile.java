@@ -11,11 +11,19 @@ import java.util.Properties;
 
 public class ReadPropertyFile {
 
+    // app vars
+    public boolean APP_ALWAYS_ON;
+    public String KEY_TAG;
+
     // Broker vars
+    public String TOPIC;
     public String BOOTSTRAP_SERVER;
     public String COMPRESSION_TYPE;
     public int BATCH_SIZE;
     public int LINGER_MS;
+    public int CONSUMER_POLL_TIMEOUT_MS;
+    public boolean COMMIT_ASYNC;
+
     // twitter vars
     public int QUEUE_CAPACITY;
     public int POLL_SECONDS;
@@ -23,7 +31,12 @@ public class ReadPropertyFile {
     public String CONSUMER_API_SECRET;
     public String APP_TOKEN;
     public String APP_SECRET;
+
     // ES vars
+    public String ES_HOSTNAME;
+    public int ES_PORT;
+    public String ES_SCHEME;
+    public String ES_INDEX;
 
     public Logger logger;
 
@@ -40,6 +53,9 @@ public class ReadPropertyFile {
             System.exit(1);
         }
 
+        // app vars
+        APP_ALWAYS_ON = Boolean.parseBoolean(properties.getProperty("app.always.on"));
+
         // twitter vars
         QUEUE_CAPACITY = Integer.parseInt(properties.getProperty("queue.capacity"));
         POLL_SECONDS = Integer.parseInt(properties.getProperty("poll.timeout.seconds"));
@@ -53,6 +69,14 @@ public class ReadPropertyFile {
         COMPRESSION_TYPE = properties.getProperty("msg.compression.type");
         BATCH_SIZE = Integer.parseInt(properties.getProperty("batch.size.kb"));
         LINGER_MS = Integer.parseInt(properties.getProperty("linger.ms"));
+        CONSUMER_POLL_TIMEOUT_MS = Integer.parseInt(properties.getProperty("consumer.poll.timeout.ms"));
+        COMMIT_ASYNC = Boolean.parseBoolean(properties.getProperty("consumer.commit.async"));
+
+        // es vars
+        ES_HOSTNAME = properties.getProperty("es.hostname");
+        ES_PORT = Integer.parseInt(properties.getProperty("es.port"));
+        ES_SCHEME = properties.getProperty("es.scheme");
+        ES_INDEX = properties.getProperty("es.index");
     }
 
 
